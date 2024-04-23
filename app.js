@@ -143,8 +143,13 @@ app.get('/api/students-csv-parsed', (req, res) => {
 });
 
 
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+
 app.post('/api/login', (req, res) => {
-  console.log("req.cookie",req.cookies);
+  console.log("aaa");
+  console.log("req.cookies",req.cookies);
   const token = "FOOBAR";
   const tokenCookie = {
     path: "/"
@@ -152,13 +157,14 @@ app.post('/api/login', (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 60 * 60 * 1000),
   };
+  console.log("tokenCookie",tokenCookie);
   res.cookie("auth-token"
-    , token, tokenCookie);
+  , token, tokenCookie);
 })
 
 app.use(express.json())
 app.post('/api/students/create', (req, res) => {
-  console.log(req.body)
+  console.log("req.body",req.body)
   const csvLine = `\r\n${req.body.name};${req.body.school}`
   console.log('csvLine', csvLine);
   const stream = fs.writeFile('data.csv', csvLine, { flag: "a" }, (err) => {
